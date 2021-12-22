@@ -20,6 +20,7 @@ func main() {
 	var row int
 	var col int
 	isFirst := true
+	isGameEnd := false
 
 	fmt.Printf("--------------------------------------\n")
 	for i := 0; ; i++ {
@@ -79,6 +80,45 @@ func main() {
 				fmt.Println(board[i])
 			}
 			fmt.Printf("\n")
+
+			for i := 0; i < len(board); i++ {
+				// row
+				if board[i][0] != "-" &&
+					board[i][1] != "-" &&
+					board[i][2] != "-" &&
+					board[i][0] == board[i][1] &&
+					board[i][1] == board[i][2] {
+					isGameEnd = true
+				}
+				// col
+				if board[0][i] != "-" &&
+					board[1][i] != "-" &&
+					board[2][i] != "-" &&
+					board[0][i] == board[1][i] &&
+					board[1][i] == board[2][i] {
+					isGameEnd = true
+				}
+			}
+			// cross
+			if board[0][0] != "-" &&
+				board[1][1] != "-" &&
+				board[2][2] != "-" &&
+				board[0][0] == board[1][1] &&
+				board[1][1] == board[2][2] {
+				isGameEnd = true
+			}
+			if board[0][2] != "-" &&
+				board[1][1] != "-" &&
+				board[2][0] != "-" &&
+				board[0][2] == board[1][1] &&
+				board[1][1] == board[2][0] {
+				isGameEnd = true
+			}
+			if isGameEnd {
+				fmt.Printf("Game end\n")
+				return
+			}
+
 			isFirst = !isFirst
 		} else {
 			fmt.Printf("\n")
