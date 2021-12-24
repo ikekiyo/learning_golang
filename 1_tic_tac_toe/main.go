@@ -2,15 +2,54 @@ package main
 
 import "fmt"
 
+const COL = 3
+const ROW = 3
+
+func isGameCompleted(board [][]string) bool {
+	isGameCompleted := false
+	for i := 0; i < len(board); i++ {
+		// row
+		if board[i][0] != "-" &&
+			board[i][1] != "-" &&
+			board[i][2] != "-" &&
+			board[i][0] == board[i][1] &&
+			board[i][1] == board[i][2] {
+			isGameCompleted = true
+		}
+		// col
+		if board[0][i] != "-" &&
+			board[1][i] != "-" &&
+			board[2][i] != "-" &&
+			board[0][i] == board[1][i] &&
+			board[1][i] == board[2][i] {
+			isGameCompleted = true
+		}
+	}
+	// cross
+	if board[0][0] != "-" &&
+		board[1][1] != "-" &&
+		board[2][2] != "-" &&
+		board[0][0] == board[1][1] &&
+		board[1][1] == board[2][2] {
+		isGameCompleted = true
+	}
+	if board[0][2] != "-" &&
+		board[1][1] != "-" &&
+		board[2][0] != "-" &&
+		board[0][2] == board[1][1] &&
+		board[1][1] == board[2][0] {
+		isGameCompleted = true
+	}
+	return isGameCompleted
+}
+
 func main() {
-	const COL = 3
-	const ROW = 3
-	var sampleBoard [ROW][COL]string = [ROW][COL]string{
+	var sampleBoard [][]string = [][]string{
 		{"1", "2", "3"},
 		{"4", "5", "6"},
 		{"7", "8", "9"},
 	}
-	var board [ROW][COL]string = [ROW][COL]string{
+	var board [][]string = [][]string{
 		{"-", "-", "-"},
 		{"-", "-", "-"},
 		{"-", "-", "-"},
@@ -20,7 +59,6 @@ func main() {
 	var row int
 	var col int
 	isFirst := true
-	isGameEnd := false
 
 	fmt.Printf("--------------------------------------\n")
 	for i := 0; ; i++ {
@@ -72,64 +110,33 @@ func main() {
 			str = "×"
 		}
 
-		if board[row][col] == "-" {
-			board[row][col] = str
-			fmt.Printf("\n")
-			for i := 0; i < len(board); i++ {
-				fmt.Printf("           ")
-				fmt.Println(board[i])
-			}
-			fmt.Printf("\n")
-
-			for i := 0; i < len(board); i++ {
-				// row
-				if board[i][0] != "-" &&
-					board[i][1] != "-" &&
-					board[i][2] != "-" &&
-					board[i][0] == board[i][1] &&
-					board[i][1] == board[i][2] {
-					isGameEnd = true
-				}
-				// col
-				if board[0][i] != "-" &&
-					board[1][i] != "-" &&
-					board[2][i] != "-" &&
-					board[0][i] == board[1][i] &&
-					board[1][i] == board[2][i] {
-					isGameEnd = true
-				}
-			}
-			// cross
-			if board[0][0] != "-" &&
-				board[1][1] != "-" &&
-				board[2][2] != "-" &&
-				board[0][0] == board[1][1] &&
-				board[1][1] == board[2][2] {
-				isGameEnd = true
-			}
-			if board[0][2] != "-" &&
-				board[1][1] != "-" &&
-				board[2][0] != "-" &&
-				board[0][2] == board[1][1] &&
-				board[1][1] == board[2][0] {
-				isGameEnd = true
-			}
-			if isGameEnd {
-				fmt.Printf("Game end\n")
-				return
-			}
-
-			isFirst = !isFirst
-		} else {
+		// Already entered
+		if board[row][col] != "-" {
 			fmt.Printf("\n")
 			fmt.Printf("-------------------------------------\n")
-			fmt.Printf("      already input the area!!!      \n")
+			fmt.Printf("           Already entered           \n")
 			fmt.Printf("-------------------------------------\n")
 			fmt.Printf("\n")
 			for i := 0; i < len(board); i++ {
 				fmt.Printf("           ")
 				fmt.Println(board[i])
 			}
+			continue
 		}
+
+		board[row][col] = str
+		fmt.Printf("\n")
+		for i := 0; i < len(board); i++ {
+			fmt.Printf("           ")
+			fmt.Println(board[i])
+		}
+		fmt.Printf("\n")
+		if isGameCompleted(board) {
+			fmt.Printf("Game end\n")
+			return
+		}
+
+		isFirst = !isFirst
+
 	}
 }
