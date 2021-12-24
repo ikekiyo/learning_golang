@@ -64,8 +64,25 @@ fmt.Printf("%#v, len: %d, cap: %d\n", s, len(s), cap(s))
 // []int{0, 0, 0}, len: 3, cap: 10
 ```
 
-### 定数
+### 構造体
+```go
+// 宣言
+type Book struct {
+	title            string
+	description      string
+	author           string
+	publication_year int
+}
 
+func main() {
+    // インスタンス生成
+    book := new(Book)
+
+    // 代入
+    book.title = "hoge"
+    book.author = "hogehoge"
+}
+```
 
 ## 参考サイト
 [配列とスライス](https://golang.hateblo.jp/entry/golang-slice-array)
