@@ -5,6 +5,11 @@ import "fmt"
 const COL = 3
 const ROW = 3
 
+type Game struct {
+	isFirstPlayer bool
+	gameBoard     [][]string
+}
+
 func isGameCompleted(board [][]string) bool {
 	isGameCompleted := false
 	for i := 0; i < len(board); i++ {
@@ -49,16 +54,17 @@ func main() {
 		{"4", "5", "6"},
 		{"7", "8", "9"},
 	}
-	var board [][]string = [][]string{
-		{"-", "-", "-"},
-		{"-", "-", "-"},
-		{"-", "-", "-"},
-	}
 	var number int
 	var str string
 	var row int
 	var col int
-	isFirst := true
+	gameInfo := new(Game)
+	gameInfo.isFirstPlayer = true
+	gameInfo.gameBoard = [][]string{
+		{"-", "-", "-"},
+		{"-", "-", "-"},
+		{"-", "-", "-"},
+	}
 
 	fmt.Printf("--------------------------------------\n")
 	for i := 0; ; i++ {
@@ -73,37 +79,9 @@ func main() {
 			break
 		}
 
-		switch number {
-		case 1:
-			row = 0
-			col = 0
-		case 2:
-			row = 0
-			col = 1
-		case 3:
-			row = 0
-			col = 2
-		case 4:
-			row = 1
-			col = 0
-		case 5:
-			row = 1
-			col = 1
-		case 6:
-			row = 1
-			col = 2
-		case 7:
-			row = 2
-			col = 0
-		case 8:
-			row = 2
-			col = 1
-		case 9:
-			row = 2
-			col = 2
-		}
-
-		switch isFirst {
+		row = (number - 1) / 3
+		col = (number - 1) % 3
+		switch gameInfo.isFirstPlayer {
 		case true:
 			str = "○"
 		case false:
@@ -111,32 +89,32 @@ func main() {
 		}
 
 		// Already entered
-		if board[row][col] != "-" {
+		if gameInfo.gameBoard[row][col] != "-" {
 			fmt.Printf("\n")
 			fmt.Printf("-------------------------------------\n")
 			fmt.Printf("           Already entered           \n")
 			fmt.Printf("-------------------------------------\n")
 			fmt.Printf("\n")
-			for i := 0; i < len(board); i++ {
+			for i := 0; i < len(gameInfo.gameBoard); i++ {
 				fmt.Printf("           ")
-				fmt.Println(board[i])
+				fmt.Println(gameInfo.gameBoard[i])
 			}
 			continue
 		}
 
-		board[row][col] = str
+		gameInfo.gameBoard[row][col] = str
 		fmt.Printf("\n")
-		for i := 0; i < len(board); i++ {
+		for i := 0; i < len(gameInfo.gameBoard); i++ {
 			fmt.Printf("           ")
-			fmt.Println(board[i])
+			fmt.Println(gameInfo.gameBoard[i])
 		}
 		fmt.Printf("\n")
-		if isGameCompleted(board) {
+		if isGameCompleted(gameInfo.gameBoard) {
 			fmt.Printf("Game end\n")
 			return
 		}
 
-		isFirst = !isFirst
+		gameInfo.isFirstPlayer = !gameInfo.isFirstPlayer
 
 	}
 }
